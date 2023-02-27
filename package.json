@@ -1,0 +1,13 @@
+{
+  "name": "soshiki-sources",
+  "version": "0.1.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": { }
+}
