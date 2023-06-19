@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VideoSource = exports.ImageSource = exports.TextSource = void 0;
 class TextSource {
-    _getListing(callback, error, listing, page) {
-        this.getListing(listing, page).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getListing(callback, error, previousInfo, listing) {
+        this.getListing(previousInfo, listing).then(callback).catch(error);
     }
-    _getSearchResults(callback, error, query, page, filters) {
-        this.getSearchResults(query, page, filters).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getSearchResults(callback, error, previousInfo, query, filters) {
+        this.getSearchResults(previousInfo, query, filters).then(callback).catch(error);
     }
     _getEntry(callback, error, id) {
-        this.getEntry(id).then(entry => callback(Object.assign({ sourceId: this.id }, entry))).catch(error);
+        this.getEntry(id).then(callback).catch(error);
     }
-    _getChapters(callback, error, id, page) {
-        this.getChapters(id, page).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getChapters(callback, error, id) {
+        this.getChapters(id).then(callback).catch(error);
     }
     _getChapterDetails(callback, error, id, entryId) {
         this.getChapterDetails(id, entryId).then(callback).catch(error);
@@ -44,17 +44,17 @@ class TextSource {
 }
 exports.TextSource = TextSource;
 class ImageSource {
-    _getListing(callback, error, listing, page) {
-        this.getListing(listing, page).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getListing(callback, error, previousInfo, listing) {
+        this.getListing(previousInfo, listing).then(callback).catch(error);
     }
-    _getSearchResults(callback, error, query, page, filters) {
-        this.getSearchResults(query, page, filters).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getSearchResults(callback, error, previousInfo, query, filters) {
+        this.getSearchResults(previousInfo, query, filters).then(callback).catch(error);
     }
     _getEntry(callback, error, id) {
-        this.getEntry(id).then(entry => callback(Object.assign({ sourceId: this.id }, entry))).catch(error);
+        this.getEntry(id).then(callback).catch(error);
     }
-    _getChapters(callback, error, id, page) {
-        this.getChapters(id, page).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getChapters(callback, error, id) {
+        this.getChapters(id).then(callback).catch(error);
     }
     _getChapterDetails(callback, error, id, entryId) {
         this.getChapterDetails(id, entryId).then(callback).catch(error);
@@ -89,17 +89,17 @@ class ImageSource {
 }
 exports.ImageSource = ImageSource;
 class VideoSource {
-    _getListing(callback, error, listing, page) {
-        this.getListing(listing, page).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getListing(callback, error, previousInfo, listing) {
+        this.getListing(previousInfo, listing).then(callback).catch(error);
     }
-    _getSearchResults(callback, error, query, page, filters) {
-        this.getSearchResults(query, page, filters).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getSearchResults(callback, error, previousInfo, query, filters) {
+        this.getSearchResults(previousInfo, query, filters).then(callback).catch(error);
     }
     _getEntry(callback, error, id) {
-        this.getEntry(id).then(entry => callback(Object.assign({ sourceId: this.id }, entry))).catch(error);
+        this.getEntry(id).then(callback).catch(error);
     }
-    _getEpisodes(callback, error, id, page) {
-        this.getEpisodes(id, page).then(res => callback(Object.assign(Object.assign({}, res), { results: res.results.map(item => (Object.assign({ sourceId: this.id }, item))) }))).catch(error);
+    _getEpisodes(callback, error, id) {
+        this.getEpisodes(id).then(callback).catch(error);
     }
     _getEpisodeDetails(callback, error, id, entryId) {
         this.getEpisodeDetails(id, entryId).then(callback).catch(error);

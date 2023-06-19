@@ -1,8 +1,24 @@
-type FilterType = {
-    type: "text" | "toggle" | "segment" | "select" | "excludableSelect" | "multiSelect" | "excludableMultiSelect" | "sort" | "ascendableSort" | "number" | "range"
+import { TypedEnum } from "./util"
+
+export const FilterType = {
+    text: "TEXT",
+    toggle: "TOGGLE",
+    segment: "SEGMENT",
+    select: "SELECT",
+    excludableSelect: "EXCLUDABLE_SELECT",
+    multiSelect: "MULTI_SELECT",
+    excludableMultiSelect: "EXCLUDABLE_MULTI_SELECT",
+    sort: "SORT",
+    ascendableSort: "ASCENDABLE_SORT",
+    number: "NUMBER"
+} as const
+export type FilterType = TypedEnum<typeof FilterType>
+
+type TypedFilter = {
+    type: FilterType
 }
 
-export type Filter = (TextFilter | ToggleFilter | SegmentFilter | SelectFilter | ExcludableSelectFilter | MultiSelectFilter | ExcludableMultiSelectFilter | SortFilter | AscendableSortFilter | NumberFilter | RangeFilter) & FilterType
+export type Filter = (TextFilterBase | ToggleFilterBase | SegmentFilterBase | SelectFilterBase | ExcludableSelectFilterBase | MultiSelectFilterBase | ExcludableMultiSelectFilterBase | SortFilterBase | AscendableSortFilterBase | NumberFilterBase) & TypedFilter
 
 export type FilterBase<Value extends FilterValue> = {
     id: string,
@@ -10,73 +26,108 @@ export type FilterBase<Value extends FilterValue> = {
     name: string
 }
 
-type FilterValue = string | boolean | number | string[] | [number, number] | [string, boolean] | [string, boolean][] | null
 
-export type TextFilter = FilterBase<string> & {
+
+type SegmentFilterOption = {
+    id: string,
+    name: string
+    selected: boolean
+}
+type SelectFilterOption = SegmentFilterOption
+type ExcludableSelectFilterOption = SelectFilterOption & {
+    excluded: boolean
+}
+type SortFilterOption = SelectFilterOption
+type AscendableSortFilterOption = SortFilterOption & {
+    ascending: boolean
+}
+
+type FilterValue = string | boolean | number | SegmentFilterOption[] | SelectFilterOption[] | ExcludableSelectFilterOption[] | SortFilterOption[] | AscendableSortFilterOption[] | null
+
+
+
+type FilterConstructor<Filter extends FilterBase<FilterValue>> = (filter: Filter) => Filter & TypedFilter
+
+
+
+export type TextFilterBase = FilterBase<string> & {
     placeholder?: string
 }
+export type TextFilter = TextFilterBase & { type: "TEXT" }
 
-export const createTextFilter = (filter: TextFilter) => { return {type: "text", ...filter } as TextFilter & FilterType }
+export const createTextFilter: FilterConstructor<TextFilterBase> = (filter: TextFilterBase) => { return { type: "TEXT", ...filter } as TextFilter }
 
-export type ToggleFilter = FilterBase<boolean>
 
-export const createToggleFilter = (filter: ToggleFilter) => { return {type: "toggle", ...filter } as ToggleFilter & FilterType }
 
-export type SegmentFilter = FilterBase<string> & {
-    selections: string[]
-}
+export type ToggleFilterBase = FilterBase<boolean>
+export type ToggleFilter = ToggleFilterBase & { type: "TOGGLE" }
 
-export const createSegmentFilter = (filter: SegmentFilter) => { return {type: "segment", ...filter } as SegmentFilter & FilterType }
+export const createToggleFilter: FilterConstructor<ToggleFilterBase> = (filter: ToggleFilterBase) => { return { type: "TOGGLE", ...filter } as ToggleFilter }
 
-export type SelectFilter = FilterBase<string | null> & {
-    selections: string[]
-}
 
-export const createSelectFilter = (filter: SelectFilter) => { return {type: "select", ...filter } as SelectFilter & FilterType }
 
-export type ExcludableSelectFilter = FilterBase<[string, boolean] | null> & {
-    selections: string[]
-}
+export type SegmentFilterBase = FilterBase<SegmentFilterOption[]>
+export type SegmentFilter = SegmentFilterBase & { type: "SEGMENT" }
 
-export const createExcludableSelectFilter = (filter: ExcludableSelectFilter) => { return {type: "excludableSelect", ...filter } as ExcludableSelectFilter & FilterType }
+export const createSegmentFilter: FilterConstructor<SegmentFilterBase> = (filter: SegmentFilterBase) => { return { type: "SEGMENT", ...filter } as SegmentFilter }
 
-export type MultiSelectFilter = FilterBase<string[]> & {
-    selections: string[]
-}
 
-export const createMultiSelectFilter = (filter: MultiSelectFilter) => { return {type: "multiSelect", ...filter } as MultiSelectFilter & FilterType }
 
-export type ExcludableMultiSelectFilter = FilterBase<[string, boolean][]> & {
-    selections: string[]
-}
+export type SelectFilterBase = FilterBase<SelectFilterOption[]>
+export type SelectFilter = SelectFilterBase & { type: "SELECT" }
 
-export const createExcludableMultiSelectFilter = (filter: ExcludableMultiSelectFilter) => { return {type: "excludableMultiSelect", ...filter } as ExcludableMultiSelectFilter & FilterType }
+export const createSelectFilter: FilterConstructor<SelectFilterBase> = (filter: SelectFilterBase) => { return { type: "SELECT", ...filter } as SelectFilter}
 
-export type SortFilter = FilterBase<string | null> & {
-    selections: string[]
-}
 
-export const createSortFilter = (filter: SortFilter) => { return {type: "sort", ...filter } as SortFilter & FilterType }
 
-export type AscendableSortFilter = FilterBase<[string, boolean] | null> & {
-    selections: string[]
-}
+export type ExcludableSelectFilterBase = FilterBase<ExcludableSelectFilterOption[]>
+export type ExcludableSelectFilter = ExcludableSelectFilterBase & { type: "EXCLUDABLE_SELECT" }
 
-export const createAscendableSortFilter = (filter: AscendableSortFilter) => { return {type: "ascendableSort", ...filter } as AscendableSortFilter & FilterType }
+export const createExcludableSelectFilter: FilterConstructor<ExcludableSelectFilterBase> = (filter: ExcludableSelectFilterBase) => { return { type: "EXCLUDABLE_SELECT", ...filter } as ExcludableSelectFilter }
 
-export type NumberFilter = FilterBase<number> & {
+
+
+export type MultiSelectFilterBase = FilterBase<SelectFilterOption[]>
+export type MultiSelectFilter = MultiSelectFilterBase & { type: "MULTI_SELECT" }
+
+export const createMultiSelectFilter: FilterConstructor<MultiSelectFilterBase> = (filter: MultiSelectFilterBase) => { return { type: "MULTI_SELECT", ...filter } as MultiSelectFilter }
+
+
+
+export type ExcludableMultiSelectFilterBase = FilterBase<ExcludableSelectFilterOption[]>
+export type ExcludableMultiSelectFilter = ExcludableMultiSelectFilterBase & { type: "EXCLUDABLE_MULTI_SELECT" }
+
+export const createExcludableMultiSelectFilter: FilterConstructor<ExcludableMultiSelectFilterBase> = (filter: ExcludableMultiSelectFilterBase) => { return { type: "EXCLUDABLE_MULTI_SELECT", ...filter } as ExcludableMultiSelectFilter }
+
+
+
+export type SortFilterBase = FilterBase<SortFilterOption[]>
+export type SortFilter = SortFilterBase & { type: "SORT" }
+
+export const createSortFilter: FilterConstructor<SortFilterBase> = (filter: SortFilterBase) => { return { type: "SORT", ...filter } as SortFilter }
+
+
+export type AscendableSortFilterBase = FilterBase<AscendableSortFilterOption[]>
+export type AscendableSortFilter = AscendableSortFilterBase & { type: "ASCENDABLE_SORT" }
+
+export const createAscendableSortFilter: FilterConstructor<AscendableSortFilterBase> = (filter: AscendableSortFilterBase) => { return { type: "ASCENDABLE_SORT", ...filter } as AscendableSortFilter }
+
+
+
+export type NumberFilterBase = FilterBase<number> & {
     lowerBound: number,
     upperBound: number,
     step?: number,
     allowsCustomInput?: boolean
 }
+export type NumberFilter = NumberFilterBase & { type: "NUMBER" }
 
-export const createNumberFilter = (filter: NumberFilter) => { return {type: "number", ...filter } as NumberFilter & FilterType }
+export const createNumberFilter: FilterConstructor<NumberFilter> = (filter: NumberFilterBase) => { return { type: "NUMBER", ...filter } as NumberFilter }
 
-export type RangeFilter = FilterBase<[number, number]> & {
-    lowerBound: number,
-    upperBound: number,
-    step?: number
+export type FilterGroup = {
+    header?: string,
+    footer?: string,
+    filters: Filter[]
 }
 
-export const createRangeFilter = (filter: RangeFilter) => { return {type: "range", ...filter } as RangeFilter & FilterType }
+export const createFilterGroup = (group: FilterGroup) => group
