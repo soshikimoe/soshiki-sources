@@ -6,3 +6,4 @@ export * from "./settings";
 export * from "./filter";
 export * from "./document";
 export * from "./tracker";
+export * from "./history";

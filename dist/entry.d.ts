@@ -20,6 +20,7 @@ export declare const EntrySeason: {
     readonly spring: "SPRING";
     readonly summer: "SUMMER";
     readonly fall: "FALL";
+    readonly unknown: "UNKNOWN";
 };
 export type EntrySeason = TypedEnum<typeof EntrySeason>;
 export declare const ImageEntryReadingMode: {
@@ -47,6 +48,7 @@ type Entry = {
 };
 export type TextEntry = Entry & {
     author?: string;
+    chapters?: number;
 };
 export type IdentifiedTextEntry = TextEntry & {
     sourceId: string;
@@ -55,12 +57,14 @@ export type ImageEntry = Entry & {
     author?: string;
     artist?: string;
     readingMode?: ImageEntryReadingMode;
+    chapters?: number;
 };
 export type IdentifiedImageEntry = ImageEntry & {
     sourceId: string;
 };
 export type VideoEntry = Entry & {
-    season?: EntrySeason;
+    season: EntrySeason;
+    episodes?: number;
 };
 export type IdentifiedVideoEntry = VideoEntry & {
     sourceId: string;
@@ -139,9 +143,15 @@ export type VideoEpisodeProvider = {
 export declare const createVideoEpisodeProvider: (provider: VideoEpisodeProvider) => VideoEpisodeProvider;
 export type VideoEpisodeUrl = {
     url: string;
+    subtitles?: VideoEpisodeUrlSubtitle[];
     quality: number | "AUTO" | "UNKNOWN";
 };
 export declare const createVideoEpisodeUrl: (url: VideoEpisodeUrl) => VideoEpisodeUrl;
+export type VideoEpisodeUrlSubtitle = {
+    name: string;
+    url: string;
+    language: string;
+};
 type Results<T> = {
     results: T[];
     page: number;

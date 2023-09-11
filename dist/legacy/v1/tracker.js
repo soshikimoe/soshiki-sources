@@ -12,7 +12,7 @@ var History;
         Status["PAUSED"] = "PAUSED";
         Status["UNKNOWN"] = "UNKNOWN";
     })(Status = History.Status || (History.Status = {}));
-})(History = exports.History || (exports.History = {}));
+})(History || (exports.History = History = {}));
 const createHistory = (history) => history;
 exports.createHistory = createHistory;
 var MediaType;
@@ -20,7 +20,7 @@ var MediaType;
     MediaType["TEXT"] = "TEXT";
     MediaType["IMAGE"] = "IMAGE";
     MediaType["VIDEO"] = "VIDEO";
-})(MediaType = exports.MediaType || (exports.MediaType = {}));
+})(MediaType || (exports.MediaType = MediaType = {}));
 class Tracker {
     _getAuthUrl() {
         return this.getAuthUrl();

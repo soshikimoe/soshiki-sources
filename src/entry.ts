@@ -22,7 +22,8 @@ export const EntrySeason = {
     winter: "WINTER",
     spring: "SPRING",
     summer: "SUMMER",
-    fall: "FALL"
+    fall: "FALL",
+    unknown: "UNKNOWN"
 } as const
 
 export type EntrySeason = TypedEnum<typeof EntrySeason>
@@ -54,7 +55,8 @@ type Entry = {
 }
 
 export type TextEntry = Entry & {
-    author?: string
+    author?: string,
+    chapters?: number
 }
 
 export type IdentifiedTextEntry = TextEntry & {
@@ -64,7 +66,8 @@ export type IdentifiedTextEntry = TextEntry & {
 export type ImageEntry = Entry & {
     author?: string,
     artist?: string,
-    readingMode?: ImageEntryReadingMode
+    readingMode?: ImageEntryReadingMode,
+    chapters?: number
 }
 
 export type IdentifiedImageEntry = ImageEntry & {
@@ -72,7 +75,8 @@ export type IdentifiedImageEntry = ImageEntry & {
 }
 
 export type VideoEntry = Entry & {
-    season?: EntrySeason
+    season: EntrySeason,
+    episodes?: number
 }
 
 export type IdentifiedVideoEntry = VideoEntry & {
@@ -102,6 +106,7 @@ export const createImageEntry = (entry: OnlyRequire<ImageEntry, "id" | "title">)
 
 export const createVideoEntry = (entry: OnlyRequire<VideoEntry, "id" | "title">) => ({
     ...entry,
+    season: entry.season ?? EntrySeason.unknown,
     ...createEntry(entry)
 } as VideoEntry)
 
@@ -197,10 +202,17 @@ export const createVideoEpisodeProvider = (provider: VideoEpisodeProvider) => pr
 
 export type VideoEpisodeUrl = {
     url: string,
+    subtitles?: VideoEpisodeUrlSubtitle[],
     quality: number | "AUTO" | "UNKNOWN"
 }
 
 export const createVideoEpisodeUrl = (url: VideoEpisodeUrl) => url
+
+export type VideoEpisodeUrlSubtitle = {
+    name: string,
+    url: string,
+    language: string
+}
 
 type Results<T> = {
     results: T[],

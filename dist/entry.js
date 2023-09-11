@@ -19,7 +19,8 @@ exports.EntrySeason = {
     winter: "WINTER",
     spring: "SPRING",
     summer: "SUMMER",
-    fall: "FALL"
+    fall: "FALL",
+    unknown: "UNKNOWN"
 };
 exports.ImageEntryReadingMode = {
     rtl: "RTL",
@@ -35,7 +36,10 @@ const createTextEntry = (entry) => (Object.assign(Object.assign({}, entry), crea
 exports.createTextEntry = createTextEntry;
 const createImageEntry = (entry) => (Object.assign(Object.assign({}, entry), createEntry(entry)));
 exports.createImageEntry = createImageEntry;
-const createVideoEntry = (entry) => (Object.assign(Object.assign({}, entry), createEntry(entry)));
+const createVideoEntry = (entry) => {
+    var _a;
+    return (Object.assign(Object.assign(Object.assign({}, entry), { season: (_a = entry.season) !== null && _a !== void 0 ? _a : exports.EntrySeason.unknown }), createEntry(entry)));
+};
 exports.createVideoEntry = createVideoEntry;
 const createTextChapter = (chapter) => chapter;
 exports.createTextChapter = createTextChapter;
@@ -47,7 +51,7 @@ var VideoEpisodeType;
     VideoEpisodeType["dub"] = "DUB";
     VideoEpisodeType["native"] = "NATIVE";
     VideoEpisodeType["unknown"] = "UNKNOWN";
-})(VideoEpisodeType = exports.VideoEpisodeType || (exports.VideoEpisodeType = {}));
+})(VideoEpisodeType || (exports.VideoEpisodeType = VideoEpisodeType = {}));
 const createVideoEpisode = (episode) => episode;
 exports.createVideoEpisode = createVideoEpisode;
 const createTextChapterDetails = (details) => details;

@@ -22,3 +22,4 @@ __exportStar(require("./settings"), exports);
 __exportStar(require("./filter"), exports);
 __exportStar(require("./document"), exports);
 __exportStar(require("./tracker"), exports);
+__exportStar(require("./history"), exports);
